@@ -1,4 +1,4 @@
-# Build record — Nestpad
+# Build record — Minimal
 
 _What got built, in the order it happened, and how each piece was verified. Written the way Sprint Zero's own class write-up (`presenter/sample/build-record.html`) documents a run — this is that document for a build that kept going well past the initial one-shot generation._
 
@@ -23,8 +23,8 @@ Each of these was requested and built one at a time, in conversation, well past 
 7. **Grouped, collapsible home sections** — root pages get an optional `section` field; the dashboard groups them into named, collapsible sections instead of one flat grid.
 8. **A monospace code/diagram block**, plus a two-page "AI Engineering Docs" example (RAG architecture, vector databases) to demonstrate it, and a code-block example added to the very first page every user sees.
 9. **A ten-item batch, all in one pass:** page icons; drag-to-reorder blocks and drag-pages-between-sections; sidebar search; page templates (via a generic duplicate-page endpoint); a short page-activity log ("version history" as a change log, not snapshots); poll-based page presence ("who's viewing this page"); **real, server-side row comments** (replacing the local-only version from step 6); page locking (a narrower stand-in for full permissions); and **real form responses** (Preview's Submit and the Responses tab, wired to actual storage — the one part of the form block that stopped being a mock).
-10. **Landing page copy pass** — repositioned from "a team wiki" to "inspired by Notion," with the framing corrected on request to not claim Nestpad *is* Notion, and em dashes removed from the copy.
-11. **Reorganized into `Nestpad/`** — `server/`, `client/`, and the generated `docs/` were moved from the Sprint Zero project root into their own `Nestpad/` folder (matching the `examples/ghost-lite` convention already used elsewhere in this repo), so the whole project is self-contained and can be run from one place.
+10. **Landing page copy pass** — repositioned from "a team wiki" to "inspired by Notion," with the framing corrected on request to not claim Minimal *is* Notion, and em dashes removed from the copy.
+11. **Reorganized into `Minimal/`** — `server/`, `client/`, and the generated `docs/` were moved from the Sprint Zero project root into their own `Minimal/` folder (matching the `examples/ghost-lite` convention already used elsewhere in this repo), so the whole project is self-contained and can be run from one place.
 12. **An Obsidian-style knowledge layer** — backlinks ("Linked mentions" on every page) and a graph view of the whole workspace, computed live from the internal links that already existed as plain substrings in block content. No new storage; verified live (hover-highlighting, click-to-navigate, and a real backlinks list all confirmed working in the browser).
 
 ## 3. What's real vs. what's a deliberate mock, as of now

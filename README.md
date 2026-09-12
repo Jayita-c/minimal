@@ -45,7 +45,7 @@ Or click **Continue as guest** on the landing page for a read-only tour with no 
                    user-stories.md, api-contract.md, build-record.md
 ```
 
-`docs/build-record.md` is the fastest way to see everything that's been built, in the order it happened. `docs/decisions.md` is the most useful single file for understanding *why* things are the way they are — every deliberate scope cut and every later addition (tables, forms, sections, locking, presence, templates, the graph, etc.) is logged there with its reasoning. `docs/api-contract.md` is the authoritative route-by-route reference.
+`docs/build-record.md` (or [`docs/build-record.html`](docs/build-record.html) for a styled version) is the fastest way to see everything that's been built, in the order it happened. `docs/decisions.md` is the most useful single file for understanding *why* things are the way they are — every deliberate scope cut and every later addition (tables, forms, sections, locking, presence, templates, the graph, etc.) is logged there with its reasoning. `docs/api-contract.md` is the authoritative route-by-route reference.
 
 ## A note on scope
 

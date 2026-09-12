@@ -1,10 +1,10 @@
 # Decisions
 
-_Sprint Zero build (Nestpad) compared to Notion. Level: MVP._
+_Sprint Zero build (Minimal) compared to Notion. Level: MVP._
 
 ## Why this document exists
 
-We built Nestpad, a shared team wiki with one loop: sign up, land in a workspace, create and nest pages, write text/heading/checklist blocks, invite a teammate, and edit each other's pages. We compared it to Notion, whose relevant surface is in `docs/reference-brief.md`. Notion is a vast product — databases, real-time multiplayer, dozens of block types, granular sharing. At MVP we keep real accounts and real shared data on the core loop and cut everything else.
+We built Minimal, a shared team wiki with one loop: sign up, land in a workspace, create and nest pages, write text/heading/checklist blocks, invite a teammate, and edit each other's pages. We compared it to Notion, whose relevant surface is in `docs/reference-brief.md`. Notion is a vast product — databases, real-time multiplayer, dozens of block types, granular sharing. At MVP we keep real accounts and real shared data on the core loop and cut everything else.
 
 ## Scope decisions
 
@@ -126,17 +126,17 @@ The PM asked for everything on a suggested list at once. Each is scoped narrowly
 - **Page presence ("who's viewing this").** Poll-based, not a websocket: the client PUTs a heartbeat every ~10s while a page is open, and a GET lists whoever else's heartbeat is under 30s old. This is the cheapest way to get a real (not simulated) presence signal without adding a socket layer to an Express app that has none.
 - **Real, server-side row comments.** This *replaces* the earlier localStorage-only comment box on a table row's detail view with actual `row_comments` rows, shared across the workspace like everything else. The "stored on this device only" caveat from that amendment no longer applies — comments are now exactly as real as any other data here.
 - **Page locking (a narrower stand-in for real permissions).** The original MVP decision to give every workspace member edit access to every page (see "No per-page permissions" above) still holds by default. A page's **creator** can now lock it; while locked, every mutating call scoped to that page — from renaming it to editing a table cell inside it — is rejected for everyone else with a 403, while viewing stays open to the whole workspace. This is deliberately coarser than real permissions (view-only vs. edit-only vs. per-person ACLs): one owner, one on/off switch, enforced in one shared helper (`assertPageEditable`) rather than a permissions model.
-- **Real form responses.** The mock form block (see its own amendment above) stays a mock everywhere except this: `Preview`'s Submit button and the `Responses` tab are now wired to a real `form_responses` table via `POST`/`GET /forms/:blockId/responses`. Nothing else about the form changed — still no public unauthenticated submission path, since Nestpad has no route that serves a single form to a stranger outside the app.
+- **Real form responses.** The mock form block (see its own amendment above) stays a mock everywhere except this: `Preview`'s Submit button and the `Responses` tab are now wired to a real `form_responses` table via `POST`/`GET /forms/:blockId/responses`. Nothing else about the form changed — still no public unauthenticated submission path, since Minimal has no route that serves a single form to a stranger outside the app.
 
 ## Amendment — an Obsidian-style knowledge layer: backlinks and a graph view (post-launch)
 
-The PM asked whether an Obsidian-like knowledge layer (bidirectional links, a graph of the whole workspace) could sit on top of Nestpad's Notion-style page model, as a real feasibility test rather than a design exercise.
+The PM asked whether an Obsidian-like knowledge layer (bidirectional links, a graph of the whole workspace) could sit on top of Minimal's Notion-style page model, as a real feasibility test rather than a design exercise.
 
 - **What it is:** Every page now has a "Linked mentions" panel listing every other page that links to it, and a new **Graph** view (in the sidebar) rendering the whole workspace as nodes and edges, click a node to open that page.
 - **Why it needed no new storage:** An internal link already exists as `[label](/app/pages/<id>)` inside a block's `content` string (the rich-text link syntax added earlier). A "link" is detected by checking whether page B's raw id appears anywhere in page A's block content — no links table, no parsing beyond a substring check. Backlinks and the graph are both computed live from existing data, not maintained as a separate index that could drift out of sync.
 - **What's deliberately not here:** Obsidian's local-first Markdown files, its plugin ecosystem, and tags are all out of scope. This amendment is narrowly "can two pages know about each other, and can you see the whole map" — the two properties that make Obsidian's graph view useful, not a reimplementation of Obsidian itself.
 - **Layout, not a physics engine:** The graph view places connected pages on one ring and isolated pages on a smaller inner ring, both by simple angle math, no force simulation and no new dependency. It doesn't look as organic as Obsidian's real graph, but it never jitters and needed nothing beyond inline SVG.
-- **Verdict on the feasibility question:** yes, cleanly. The reason it dropped in easily is that Nestpad's internal links were already just plain text pattern matching (`/app/pages/<id>` inside a string) rather than a structured field, so "does A mention B" is a query, not a schema change.
+- **Verdict on the feasibility question:** yes, cleanly. The reason it dropped in easily is that Minimal's internal links were already just plain text pattern matching (`/app/pages/<id>` inside a string) rather than a structured field, so "does A mention B" is a query, not a schema change.
 
 ## Technical decisions
 

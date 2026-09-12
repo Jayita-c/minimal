@@ -1,4 +1,4 @@
-# Nestpad — PRD
+# Minimal — PRD
 
 _Built with Sprint Zero. Reference: Notion. Level: MVP._
 
@@ -6,7 +6,7 @@ _Built with Sprint Zero. Reference: Notion. Level: MVP._
 
 Small teams want a shared place to write things down — onboarding notes, team norms, a running doc — that lives in one navigable tree instead of scattered files or chat threads. Notion does this well but arrives with accounts, pricing tiers, databases, and a large surface area a small self-hosted team doesn't need just to get pages up and shared.
 
-Nestpad is the smallest version of that: one shared workspace per team, pages that nest under other pages, three block types (text, heading, checklist), and teammates invited by email who can all view and edit the same pages. It runs locally with no external account, so a team can self-host it on any machine and point everyone at one URL.
+Minimal is the smallest version of that: one shared workspace per team, pages that nest under other pages, three block types (text, heading, checklist), and teammates invited by email who can all view and edit the same pages. It runs locally with no external account, so a team can self-host it on any machine and point everyone at one URL.
 
 ## 2. Goals
 

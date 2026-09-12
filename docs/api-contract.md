@@ -1,6 +1,6 @@
 # API contract
 
-_Sprint Zero build (Nestpad). Stack: node-react. Data layer: local. Level: MVP._
+_Sprint Zero build (Minimal). Stack: node-react. Data layer: local. Level: MVP._
 
 This file is law. The backend implements exactly these routes and shapes; the frontend consumes exactly these routes and shapes; QA tests against them. The two engineers never talk to each other, so nothing here is negotiable at build time. If not listed, it is not returned.
 
