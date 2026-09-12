@@ -660,15 +660,20 @@ function createExamplePages(workspaceId, userId) {
   insertBlock(part2Id, "bulleted_list", "Batch vs. real-time updates — some indexes rebuild cheaply on the fly, others need periodic re-indexing", 18, null);
 }
 
-// Removes a table block's columns/rows/cells. Safe to call on any block —
-// a no-op if it has no table rows.
-function deleteTableDataForBlock(blockId) {
+// Removes everything that references a block as a foreign key — table
+// columns/rows/cells, row comments, and form responses — so the block
+// itself can be deleted without violating a foreign key constraint.
+// Safe to call on any block type: a no-op for whichever of these a given
+// block has none of.
+function deleteBlockDependents(blockId) {
   const rows = db.prepare(`SELECT id FROM table_rows WHERE block_id = ?`).all(blockId);
   rows.forEach((r) => {
+    db.prepare(`DELETE FROM row_comments WHERE row_id = ?`).run(r.id);
     db.prepare(`DELETE FROM table_cells WHERE row_id = ?`).run(r.id);
   });
   db.prepare(`DELETE FROM table_rows WHERE block_id = ?`).run(blockId);
   db.prepare(`DELETE FROM table_columns WHERE block_id = ?`).run(blockId);
+  db.prepare(`DELETE FROM form_responses WHERE block_id = ?`).run(blockId);
 }
 
 function deletePageRecursive(pageId) {
@@ -679,8 +684,10 @@ function deletePageRecursive(pageId) {
     deletePageRecursive(child.id);
   }
   const blocks = db.prepare(`SELECT id FROM blocks WHERE page_id = ?`).all(pageId);
-  blocks.forEach((b) => deleteTableDataForBlock(b.id));
+  blocks.forEach((b) => deleteBlockDependents(b.id));
   db.prepare(`DELETE FROM blocks WHERE page_id = ?`).run(pageId);
+  db.prepare(`DELETE FROM page_activity WHERE page_id = ?`).run(pageId);
+  db.prepare(`DELETE FROM page_presence WHERE page_id = ?`).run(pageId);
   db.prepare(`DELETE FROM pages WHERE id = ?`).run(pageId);
 }
 
@@ -1251,7 +1258,7 @@ app.delete("/blocks/:id", requireAuth, (req, res) => {
   if (editCheck) {
     return res.status(editCheck.status).json(editCheck.body);
   }
-  deleteTableDataForBlock(result.block.id);
+  deleteBlockDependents(result.block.id);
   db.prepare(`DELETE FROM blocks WHERE id = ?`).run(result.block.id);
   logActivity(result.page.id, req.user.id, `Removed a ${result.block.type} block`);
   return res.status(204).send();
